@@ -1,0 +1,16 @@
+{
+  "name": "sizer",
+  "version": "1.0.0",
+  "description": "Figure out package sizes and where to cut",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@bazel/typescript": "^0.26.0",
+    "@types/request-promise-native": "^1.0.15",
+    "@types/semver": "^5.5.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "semver": "^5.6.0",
+    "typescript": "^3.3.3333"
+  }
+}
