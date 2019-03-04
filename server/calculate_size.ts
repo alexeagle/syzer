@@ -1,21 +1,47 @@
-import rp = require('request-promise-native');
+const rp = require('request-promise-native');
 import {maxSatisfying} from 'semver';
 
+async function retryRequest(request: {}) {
+    async function doRequest(request: {}) {
+        return await rp(request);
+    }
+    try {
+        return await doRequest(request);
+    } catch (e) {
+        try {
+            return await doRequest(request);
+        } catch (e) {
+            try {
+                return await doRequest(request);
+            } catch (e) {
+                throw new Error('tried three times; giving up' + e);
+            }
+
+        }
+    }
+}
 /**
  * @param url like https://registry.npmjs.org/@yarnpkg/lockfile/-/lockfile-1.0.0.tgz
  * @returns the size in bytes of the resource
  */
 async function fetchSize(url: string): Promise<number> {
-    const headers = await rp({
+    const headers = await retryRequest({
         url,
         method: 'HEAD',
         timeout: 2000,
     });
-    return Number(headers['content-length']);
+    return Number(headers['content-length']);    
+}
+    
+export interface SizeInfo {
+    pkg: string,
+    version: string,
+    dependencies: SizeInfo[],
+    bytes?: number
 }
 
-export async function calcSize(pkgName: string, version = 'latest', recurseDepth = 0, deps = new Set<string>()): Promise<number> {
-    const metadata = await rp({
+export async function calcSize(pkgName: string, version = 'latest', deps = new Set<string>()): Promise<SizeInfo|undefined> {
+    const metadata = await retryRequest({
         url: `https://registry.yarnpkg.com/${pkgName}`, 
         json: true,
         timeout: 2000,
@@ -35,22 +61,26 @@ export async function calcSize(pkgName: string, version = 'latest', recurseDepth
     }
 
     const pkg = metadata['versions'][matchedVersion];
+    const result: SizeInfo = {
+        pkg: pkgName,
+        version: matchedVersion,
+        dependencies: [],
+    }
     if (deps.has(pkg['_id'])) {
-        return 0;
+        return;
     }
     deps.add(pkg['_id']);
 
-    let pkgSize = await fetchSize(pkg['dist']['tarball']);
+    result.bytes = await fetchSize(pkg['dist']['tarball']);
     
     if (pkg['dependencies']) {
         const depSizes = Object.keys(pkg['dependencies']).map(async d => { 
-            return calcSize(d, pkg['dependencies'][d], recurseDepth + 1, deps); 
+            return calcSize(d, pkg['dependencies'][d], deps); 
         });
         (await Promise.all(depSizes)).filter(s=>!!s).forEach(size => {
-            pkgSize += size;
+            result.dependencies.push(size!);
         });
     }
 
-    console.error('    '.repeat(recurseDepth), pkg['_id'], pkgSize);
-    return pkgSize;
+    return result;
 }
