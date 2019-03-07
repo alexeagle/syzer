@@ -1,21 +1,23 @@
 import {calcSize, SizeInfo} from './calculate_size';
 
-function printSize(size: SizeInfo, buffer: string[], recurseDepth = 0): number {
+function printSize(size: SizeInfo, buffer: string[], path = ''): number {
     let transitiveSize = size.bytes!;
+    const thisPath = path.length ? `${path}/${size.pkg}@${size.version}` : `${size.pkg}@${size.version}`;
     size.dependencies.forEach(d => {
-        transitiveSize += printSize(d, buffer, recurseDepth + 1);
+        transitiveSize += printSize(d, buffer, thisPath);
     });
 
-    const pad = '    '.repeat(recurseDepth);
-    buffer.push(`${pad}${size.pkg}@${size.version}: ${size.bytes} (transitive ${transitiveSize})`);
+    const transitiveMsg = size.bytes === transitiveSize ? '' : `(transitive ${transitiveSize})`;
+    //buffer.push(`${pad}${size.pkg}@${size.version}: ${size.bytes} ${transitiveMsg}`);
+    buffer.push(`${transitiveSize} ${thisPath}`)
     return transitiveSize;
 }
 
-calcSize('@angular/cli').then(size => {
+calcSize('@angular/cli', 'next').then(size => {
     const buffer: string[] = [];
     printSize(size!, buffer);
     // print reversed, so the top-level dep is first
     for (let i = buffer.length-1; i >= 0; i--) {
-        console.error(buffer[i]);
+        console.log(buffer[i]);
     }
 });

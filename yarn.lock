@@ -2,6 +2,30 @@
 # yarn lockfile v1
 
 
+"@bazel/bazel-darwin_x64@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@bazel/bazel-darwin_x64/-/bazel-darwin_x64-0.23.0.tgz#11f40d23d282e3034da5c223462f17924adc6c42"
+  integrity sha512-kEn+SzN9zK2dHeKpTpkZma4ZqZdlzEagYLf2EY7yqRWKpD8oW5MZ2S2JxwvR4w1ZrHCth/x4dFsxwPlNA585JQ==
+
+"@bazel/bazel-linux_x64@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@bazel/bazel-linux_x64/-/bazel-linux_x64-0.23.0.tgz#5c3a0ebc9e68fa3a4bb7a0d05367febca15897a2"
+  integrity sha512-B+FQOEcrRCM+D/w2hB5uh8j/HiZC2XN4+nthWvgkvdsgiKDXUf0oP/kLCVF/J7T5FAWafky97KDLPPcD6w1Fhg==
+
+"@bazel/bazel-win32_x64@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@bazel/bazel-win32_x64/-/bazel-win32_x64-0.23.0.tgz#9956051d6f66ccf43ed74f0855522c8c673eff97"
+  integrity sha512-88RfiUwqulva7KmPmgqjYK7EPE1qOwi03jOeDs+U3tb+HUwkyr88t5DKtZU5KBsYjk1UbFFes+RVZtkPmKmcmQ==
+
+"@bazel/bazel@^0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@bazel/bazel/-/bazel-0.23.0.tgz#22e71d55ccebfd76f6f0bd8a15076160adfac61f"
+  integrity sha512-6XQ51t4ssEpdCea0rquiGB6cPr5/1Hef4LyHOzYDI8UnLt3pFAKAfOwEqC7HPD21zX3+usa3zSHrID6oOADppg==
+  optionalDependencies:
+    "@bazel/bazel-darwin_x64" "0.23.0"
+    "@bazel/bazel-linux_x64" "0.23.0"
+    "@bazel/bazel-win32_x64" "0.23.0"
+
 "@bazel/typescript@^0.26.0":
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/@bazel/typescript/-/typescript-0.26.0.tgz#c06139d76c8b9d3a3ed98a721b776fedb4b11c82"
@@ -174,6 +198,11 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   integrity sha512-brWl9y6vOB1xYPZcpZde3N9zDByXTosAeMDo4p1wzo6UMOX4vumB+TP1RZ76sfE6Md68Q0NJSrE/gbezd4Ul+w==
   dependencies:
     delayed-stream "~1.0.0"
+
+commander@^2.11.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
+  integrity sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
 
 concat-map@0.0.1:
   version "0.0.1"
@@ -641,6 +670,13 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+webtreemap@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/webtreemap/-/webtreemap-2.0.1.tgz#2891805bb9a4acbeabbfd0f8bdb82fbe55b39dc6"
+  integrity sha1-KJGAW7mkrL6rv9D4vbgvvlWzncY=
+  dependencies:
+    commander "^2.11.0"
 
 window-size@^0.1.4:
   version "0.1.4"
