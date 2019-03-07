@@ -1,8 +1,10 @@
-# Sizer
+# Syzer
 
 Analyze the transitive download size of npm packages.
 
 Maybe useful as a general analysis of npm dependencies.
+
+It's named after a character from True and the Rainbow Kingdom who shrinks things: https://www.youtube.com/watch?v=5W-TKhUQmys
 
 ## Run it
 
