@@ -13,7 +13,7 @@ function printSize(size: SizeInfo, buffer: string[], path = ''): number {
     return transitiveSize;
 }
 
-calcSize('@angular/cli', 'next').then(size => {
+calcSize('/home/alexeagle/Projects/try_cli/something/package.json').then(size => {
     const buffer: string[] = [];
     printSize(size!, buffer);
     // print reversed, so the top-level dep is first

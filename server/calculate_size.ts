@@ -1,5 +1,6 @@
 const rp = require('request-promise-native');
 import {maxSatisfying} from 'semver';
+import { readFileSync } from 'fs';
 
 async function retryRequest(request: {}) {
     async function doRequest(request: {}) {
@@ -41,6 +42,24 @@ export interface SizeInfo {
 }
 
 export async function calcSize(pkgName: string, version = 'latest', deps = new Set<string>()): Promise<SizeInfo|undefined> {
+    if (pkgName.endsWith('package.json')) {
+        const result: SizeInfo = {
+            pkg: 'package.json',
+            version: '',
+            dependencies: [],
+            bytes: 0,
+        }
+        const pkgJson = JSON.parse(readFileSync(pkgName, {encoding: 'utf-8'}));
+        const depSizes = [];
+        for (const [pkg, version] of Object.entries({...pkgJson.dependencies, ...pkgJson.devDependencies})) {
+            depSizes.push(calcSize(pkg, version as string, deps));
+        }
+        (await Promise.all(depSizes)).filter(s=>!!s).forEach(size => {
+            result.dependencies.push(size!);
+        });
+        return result;
+    }
+
     const metadata = await retryRequest({
         url: `https://registry.yarnpkg.com/${pkgName}`, 
         json: true,
